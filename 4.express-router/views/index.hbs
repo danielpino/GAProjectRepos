@@ -5,15 +5,28 @@
     <h3>Urgent Todos</h3>
     <ul>
         {{#each todos}} {{#if this.urgent}}
-        <li>Description: {{this.description}} | Location: {{this.location}}</li>
-        {{/if}} {{/each}}
+        <li>
+            <a href="/todos/{{@index}}">Description: {{this.description}} | Location: {{this.location}}</a>
+        </li>
+        <div><a href="/todos/{{@index}}/edit">Edit</a></div>
+        <form action="/todos/{{@index}}?_method=DELETE" method="POST">
+            <input type="submit" value="DELETE" />
+        </form>
+        <br> {{/if}} {{/each}}
     </ul>
 
     <h3>Non-Urgent Todos</h3>
     <ul>
         {{#each todos}} {{#unless this.urgent}}
-        <li>Description: {{this.description}} | Location: {{this.location}}</li>
-        {{/unless}} {{/each}}
+
+        <li>
+            <a href="/todos/{{@index}}">Description: {{this.description}} | Location: {{this.location}}</a>
+        </li>
+        <div><a href="/todos/{{@index}}/edit">Edit</a></div>
+        <form action="/todos/{{@index}}?_method=DELETE" method="POST">
+            <input type="submit" value="DELETE" />
+        </form>
+        <br> {{/unless}} {{/each}}
     </ul>
 </p>
 
