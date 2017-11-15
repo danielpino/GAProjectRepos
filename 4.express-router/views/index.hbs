@@ -1,10 +1,22 @@
+{{#if todos}}
 <h1> You have {{todos.length}} Todos</h1>
 <p>
+
+    <h3>Urgent Todos</h3>
     <ul>
-        {{#each todos}}
-        <li>Description: {{this.description}}</li>
-        <li>Urgent: {{this.urgent}}</li>
-        <br/>
-        {{/each}}
-    </ul>    
+        {{#each todos}} {{#if this.urgent}}
+        <li>Description: {{this.description}} | Location: {{this.location}}</li>
+        {{/if}} {{/each}}
+    </ul>
+
+    <h3>Non-Urgent Todos</h3>
+    <ul>
+        {{#each todos}} {{#unless this.urgent}}
+        <li>Description: {{this.description}} | Location: {{this.location}}</li>
+        {{/unless}} {{/each}}
+    </ul>
 </p>
+
+{{else}}
+<p> you have no todos </p>
+{{/if}}

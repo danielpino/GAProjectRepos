@@ -1,9 +1,11 @@
 module.exports = {
     seededTodos: [{
         description: "get beer",
-        urgent: true
+        urgent: true,
+        location: 'Kroger'
     }, {
         description: "dry cleaning",
-        urgent: false
+        urgent: false,
+        location: 'Dry Cleaner'
     }]
 };
