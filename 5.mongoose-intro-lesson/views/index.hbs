@@ -2,12 +2,7 @@
 
 {{#each students}}
 <h2>
-    <a href='/students/{{this._id}}'>{{this.name}}</a></h2>
-{{#each this.projects}}
-<p>
-        Project Title: {{this.title}} | Project Unit Covered: {{this.unit}}<br>
-</p>
-{{/each}}
+    <a href='/students/{{this._id}}'>{{this.name}} has {{this.projects.length}} projects</a></h2>
 {{/each}}
 
 {{students}}
