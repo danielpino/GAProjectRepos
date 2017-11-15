@@ -1,5 +1,5 @@
-const express = require('express')
-const router = express.Router()
+var express = require('express')
+var router = express.Router({mergeParams: true})
 var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
 
@@ -7,15 +7,19 @@ const Schema = require("../db/schema.js")
 const StudentModel = Schema.StudentModel
 const ProjectModel = Schema.ProjectModel
 
+var projectsController = require('../controllers/projects_controller.js');
+
 router.use(bodyParser.urlencoded({
     extended: true
 }));
 router.use(methodOverride('_method'));
 
+router.use('/:studentId/projects', projectsController);
+
 router.get('/', (req, res) => {
+    console.log(`Loading index page`)
     StudentModel.find({})
         .then((students) => {
-            console.log(students);
             res.render('index', {
                 students
             })
@@ -25,30 +29,33 @@ router.get('/', (req, res) => {
         })
 })
 
-router.post('/', function (req, res) {
+router.get('/add', (req, res) => {
+    console.log(`Loading add student page`)
+    res.render('add_student')
+})
+
+router.put('/', function (req, res) {
+    console.log(`Adding a new student`)
     var student = new StudentModel({
         name: req.body.name
     });
     student.save(function (err, student) {
-        if (err) {
-            console.log(err);
-        }
+        if (err) console.log(err);
         console.log(student);
         res.redirect('/students');
     });
 });
 
 router.put('/:studentId', (req, res) => {
+    const studentId = req.params.studentId;
+    console.log(`Updating student: ${studentId}`)
     const updatedStudent = req.body;
 
-    console.log(req.body);
-
-    StudentModel.findByIdAndUpdate(req.params.studentId, updatedStudent, {
+    StudentModel.findByIdAndUpdate(studentId, updatedStudent, {
             new: true
         })
         .then((student) => {
-            console.log(`${student.name} updated!`);
-            res.redirect(`/students/${req.params.studentId}`);
+            res.redirect(`/students/${studentId}`);
         })
         .catch((error) => {
             console.log(error)
@@ -56,8 +63,8 @@ router.put('/:studentId', (req, res) => {
 })
 
 router.delete('/:studentId', (req, res) => {
-    const studentId = req.params.studentId
-    console.log(`Deleting student with ID: ${studentId}`)
+    const studentId = req.params.studentId;
+    console.log(`Deleting student: ${studentId}`)
 
     StudentModel.findByIdAndRemove(studentId)
         .then(() => {
@@ -69,9 +76,11 @@ router.delete('/:studentId', (req, res) => {
 })
 
 router.get('/:studentId', (req, res) => {
-    StudentModel.findById(req.params.studentId)
+    const studentId = req.params.studentId;
+    console.log(`Getting student: ${studentId}`)
+
+    StudentModel.findById(studentId)
         .then((student) => {
-            console.log(`Getting student with ID: `, student.id);
             res.render('show_student', {
                 student
             })
@@ -79,41 +88,7 @@ router.get('/:studentId', (req, res) => {
 })
 
 router.get('/:studentId/edit', (req, res) => {
-    StudentModel.findById(req.params.studentId)
-        .then((student) => {
-            res.render('edit_student', {
-                student
-            })
-        })
-})
-
-router.get('/:studentId/projects', (req, res) => {
-    StudentModel.findById(req.params.studentId)
-        .then((student) => {
-            res.render('show_student', {
-                student
-            })
-        })
-})
-
-router.put('/:studentId/projects', (req, res) => {
     const studentId = req.params.studentId;
-    const newProject = req.body;
-
-    StudentModel.findById(studentId)
-        .then((student) => {
-            student.projects.push(newProject);
-            StudentModel.findByIdAndUpdate(studentId, student, {
-                    new: true
-                })
-                .then((student) => {
-                    console.log(`${student.name} updated!`);
-                    res.redirect(`/students/${studentId}`);
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
-        })
 })
 
 router.put('/:studentId/projects/:projectId', (req, res) => {
@@ -128,83 +103,10 @@ router.put('/:studentId/projects/:projectId', (req, res) => {
                 .then((student) => {
                     console.log(`${student.name} updated!`);
                     res.redirect(`/students/${studentId}`);
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
-        })
-    res.redirect(`${projectId}`);
-})
-
-router.get('/:studentId/projects/add', (req, res) => {
-    StudentModel.findById(req.params.studentId)
-        .then((student) => {
-            res.render('add_project', {
+            res.render('edit_student', {
                 student
             })
         })
-})
-
-router.get('/:studentId/projects/:projectId', (req, res) => {
-    StudentModel.findById(req.params.studentId)
-        .then((student) => {
-            var project = student.projects.find(function (project) {
-                return project._id == req.params.projectId
-            })
-            res.render('show_project', {
-                project,
-                student
-            })
-        })
-})
-
-router.get('/:studentId/projects/:projectId/edit', (req, res) => {
-    StudentModel.findById(req.params.studentId)
-        .then((student) => {
-            var project = student.projects.id(req.params.projectId);
-            res.render('edit_project', {
-                project,
-                student
-            })
-        })
-})
-
-router.put('/:studentId/projects/:projectId', (req, res) => {
-    const studentId = req.params.studentId;
-    const projectId = req.params.projectId;
-
-    const updatedProject = req.body;
-    console.log(req.body);
-
-    StudentModel.findByIdAndUpdate(studentId, {
-        $push: {
-            projects: {
-                updatedProject
-            }
-        }
-    }).exec(function (err, item) {
-        if (err) console.log(err);
-        res.redirect(`/students/${studentId}`);
-    })
-})
-
-router.delete('/:studentId/projects/:projectId', (req, res) => {
-    const studentId = req.params.studentId;
-    const projectId = req.params.projectId;
-
-    const updatedProject = req.body;
-    console.log(req.body);
-
-    StudentModel.findByIdAndUpdate(studentId, {
-        $pull: {
-            projects: {
-                _id: projectId
-            }
-        }
-    }).exec(function (err, item) {
-        if (err) console.log(err);
-        res.redirect(`/students/${studentId}`);
-    })
 })
 
 module.exports = router;

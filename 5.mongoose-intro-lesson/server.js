@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express(); // install express on our server
-var router = express.Router();
+var router = express.Router({mergeParams: true})
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var studentController = require('./controllers/students_controller.js');
