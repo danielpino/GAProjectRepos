@@ -1,15 +1,29 @@
-var express = require('express'); // Loading the express module on our server
+var express = require('express'); // Loading express on our server
+var app = express(); // install express on our server
+var hbs = require('hbs'); // loads handlebars
 
-var app = express(); // Creates a new instance of express on our server
+app.use(express.static(__dirname + '/public')); // VERY IMPORTANT!! Make sure to add a '/'
+app.set("view engine", "hbs"); //tells Express what to use for rendering templates
 
 app.get("/", function (req, res) {
   // display 'Hello World!'
   res.send('Hello World!');
 });
 
-app.get("/greeting", function (req, res) {
-  // display 'Hello World!'
-  res.send('Hey, WDI 12!');
+app.get('/greeting', function(req, res) {
+  console.log(req.query);
+  
+  res.render('greeting', {
+    data: req.query.saying
+  });
+});
+
+app.get('/favorite-foods', function(req, res) {
+  var favoriteFoods = ["Jeni's Almond Butter ice cream", 'Tacos from Superica', 'A Breakfast Sandwich from Gjelina to go in Venice', 'Croissants from Bottega Louie in Downtown Los Angeles', 'Pizza from Little Star in San Francisco'];
+
+  res.render('favorite-foods', {
+      data: favoriteFoods
+  });
 });
 
 app.get("/rihanna", function (req, res) {
