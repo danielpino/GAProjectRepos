@@ -1,0 +1,13 @@
+<h1>Student - {{student.name}}</h1>
+<p>
+    {{#each student.projects}} Project Title: {{this.title}} | Project Unit Covered: {{this.unit}}
+    <br>
+    <a href='/students/{{../student._id}}/projects/{{this._id}}'>Show Project Page</a>
+    <br>
+    <br> {{/each}}
+</p>
+<a href='/students/{{student.id}}/projects/add'>Add Project</a>
+<br>
+<a href='/students/{{student.id}}/edit'>Edit Student: {{student.name}}</a>
+<br>
+<a href='/students'>Return to All Students</a>

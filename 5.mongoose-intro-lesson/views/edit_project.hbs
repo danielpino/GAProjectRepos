@@ -1,0 +1,26 @@
+<div class="row">
+    <form action="/students/{{student.id}}/projects/{{project.id}}?_method=PUT" method="POST" class="col-md-6 col-md-offset-3">
+        <div class="form-group">
+            <label for="_id">ID:</label>
+            <input type="text" name="_id" class="form-control" value="{{project._id}}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" name="title" class="form-control" value="{{project.title}}">
+        </div>
+        <div class="form-group">
+            <label for="unit">Unit:</label>
+            <input type="text" name="unit" class="form-control" value="{{project.unit}}">
+        </div>
+        <br>
+        <div>
+            <input type="submit" value="Update Project" class="btn btn-default">
+        </div>
+    </form>
+</div>
+
+<form action='/students/{{student._id}}/projects/{{project._id}}?_method=DELETE' method="post">
+  <button>Delete Project: {{project.title}}</button>
+</form>
+<br>
+<a href='/students/{{student.id}}'>Go back to Student: {{student.name}}</a>
