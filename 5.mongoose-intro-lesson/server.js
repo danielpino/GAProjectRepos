@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express(); // install express on our server
-var router = express.Router({mergeParams: true})
+var router = express.Router({
+  mergeParams: true
+})
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var studentController = require('./controllers/students_controller.js');
@@ -17,3 +19,8 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(methodOverride('_method'));
+
+app.get('/', (req, res) => {
+  console.log(`Loading Main`);
+  res.send(`Hello World!`);
+})

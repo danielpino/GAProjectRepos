@@ -1,5 +1,7 @@
 const express = require('express')
-var router = express.Router({mergeParams: true})
+var router = express.Router({
+    mergeParams: true
+})
 var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
 
@@ -58,9 +60,9 @@ router.put('/:projectId', (req, res) => {
 
 router.put('/', (req, res) => {
     const studentId = req.params.studentId;
-    const projectId = req.params.projectId;    
+    const projectId = req.params.projectId;
     console.log(`Adding project for student: ${studentId}`)
-    
+
     const newProject = new ProjectModel({
         title: req.body.title,
         unit: req.body.unit
@@ -99,7 +101,7 @@ router.get('/:projectId/edit', (req, res) => {
     var studentId = req.params.studentId;
     var projectId = req.params.projectId;
     console.log(`Loading Edit Project Page for student: ${studentId} and project ${projectId}`)
-    
+
     StudentModel.findById(studentId)
         .then((student) => {
             var project = student.projects.id(projectId);

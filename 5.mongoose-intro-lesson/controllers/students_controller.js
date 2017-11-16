@@ -1,5 +1,7 @@
 var express = require('express')
-var router = express.Router({mergeParams: true})
+var router = express.Router({
+    mergeParams: true
+})
 var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
 
