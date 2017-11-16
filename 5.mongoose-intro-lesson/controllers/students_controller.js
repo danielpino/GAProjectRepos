@@ -89,20 +89,10 @@ router.get('/:studentId', (req, res) => {
 
 router.get('/:studentId/edit', (req, res) => {
     const studentId = req.params.studentId;
-})
+    console.log(`Getting edit page for student: ${studentId}`)
 
-router.put('/:studentId/projects/:projectId', (req, res) => {
     StudentModel.findById(studentId)
         .then((student) => {
-            var oldProject = student.projects.id(projectId);
-            oldProject.title = updatedProject.title;
-            oldProject.unit = updatedProject.unit;
-            StudentModel.findByIdAndUpdate(studentId, student, {
-                    new: true
-                })
-                .then((student) => {
-                    console.log(`${student.name} updated!`);
-                    res.redirect(`/students/${studentId}`);
             res.render('edit_student', {
                 student
             })
